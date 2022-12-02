@@ -49,7 +49,7 @@ function App() {
         </a>
         <input
           style={{
-            width: "18px",
+            width: "24px",
             margin: "0",
           }}
           type="checkbox"
