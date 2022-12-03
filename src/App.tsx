@@ -4,16 +4,10 @@ import { Ep, Seasons, TheVampireDiaries } from "./assets/Episodios_TVD";
 
 const key = "lista_tvd";
 function App() {
-  const [show_watched, setShow_Watched] = useState<boolean>(true);
+  const [show_watched, setShow_Watched] = useState<boolean>(false);
   const [lista, setLista] = useState<Seasons[]>();
 
   useEffect(() => {
-    const show_watched_local = localStorage.getItem("show_watched");
-    // if(!show_watched_local){
-    setShow_Watched(show_watched_local === "true");
-    // }
-    console.log("show_watched_local", show_watched_local);
-
     const lista_local = localStorage.getItem(key);
     if (lista_local) {
       setLista(JSON.parse(lista_local));
@@ -26,12 +20,8 @@ function App() {
     lista && localStorage.setItem(key, JSON.stringify(lista));
   }, [lista]);
 
-  useEffect(() => {
-    localStorage.setItem("show_watched", String(show_watched));
-    console.log(show_watched);
-  }, [show_watched]);
-
   function RenderEps(Ep: Ep, key_ep: number, key_season: number) {
+    if (Ep.watched === true && !show_watched) return null;
     return (
       <div
         key={key_ep.toString()}
@@ -49,7 +39,7 @@ function App() {
         </a>
         <input
           style={{
-            width: "24px",
+            minWidth: "24px",
             margin: "0",
           }}
           type="checkbox"
@@ -81,13 +71,24 @@ function App() {
   return (
     <div className="App">
       <header>The Vampire Diaries</header>
-      <div style={{ display: "flex" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          margin: "4px 0",
+        }}
+      >
         <p>Show watched episodes?</p>
         <input
           type="checkbox"
           checked={show_watched === true}
           onChange={(e) => {
             setShow_Watched(e.target.checked);
+          }}
+          style={{
+            width: "24px",
+            margin: "0",
           }}
         ></input>
       </div>
